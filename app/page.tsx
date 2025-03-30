@@ -4,7 +4,6 @@ import { products } from '@wix/stores';
 import { HomeScreen } from '@app/components/HomeScreen/HomeScreen';
 import { Shop } from '@app/components/Shop/Shop';
 
-
 export default async function Home() {
   const wixClient = await getWixClient();
   let productsForCategories: { category: string; product: products.Product }[] =
