@@ -2,6 +2,8 @@ import { getWixClient } from '@app/hooks//useWixClientServer';
 import { wixEventsV2 as wixEvents } from '@wix/events';
 import { products } from '@wix/stores';
 import { HomeScreen } from '@app/components/HomeScreen/HomeScreen';
+import { Shop } from '@app/components/Shop/Shop';
+
 
 export default async function Home() {
   const wixClient = await getWixClient();
@@ -28,19 +30,11 @@ export default async function Home() {
     );
   } catch (e) {}
 
-  let events: wixEvents.V3Event[] = [];
+  let items: products.Product[] = [];
   try {
-    events = (
-      await wixClient.wixEvents
-        .queryEvents({
-          fields: [wixEvents.RequestedFields.DETAILS],
-        })
-        .limit(10)
-        .ascending('dateAndTimeSettings.startDate')
-        .find()
-    ).items;
-  } catch (e) {}
-  return (
-    <HomeScreen events={events} productsForCategories={productsForCategories} />
-  );
+    items = (await wixClient.products.queryProducts().limit(20).find()).items;
+  } catch (err) {
+    console.error(err);
+  }
+  return <Shop items={items} />;
 }
